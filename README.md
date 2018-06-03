@@ -2,6 +2,6 @@
 Simple Hash value calculater and Checksum Tool
 
 #Checksum<br />
-MD5:2a2d259f75ddf54ab7cf4db59321fda2<br />
-SHA-1:f37df27d5bc00954da944c644f25da85fff6bb56<br />
-SHA-256:f22285e8b1eb8fc9d4ffdb28b7a1b96565f4d963f72246988643020069973dc4<br />
+MD5:3a0fd0cc777d8f2348b36b47a4322817<br />
+SHA-1:a6324d15a0cd07488150527ffe6104039b27d6d0<br />
+SHA-256:f722e01742d8838cb5b6b6095f7d5ac15c8b2a6cc793afb7a9f3be4ce2140dcc<br />
