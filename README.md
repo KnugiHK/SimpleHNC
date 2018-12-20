@@ -8,6 +8,7 @@ Simple Hash value calculater and Checksum Tool
 4. SHA-256
 
 # Checksum
-MD5:3a0fd0cc777d8f2348b36b47a4322817<br />
-SHA-1:a6324d15a0cd07488150527ffe6104039b27d6d0<br />
-SHA-256:f722e01742d8838cb5b6b6095f7d5ac15c8b2a6cc793afb7a9f3be4ce2140dcc<br />
+CRC32:9681ef6e<br />
+MD5:b6e55e041a9294ca603b3d2b57ffa854<br />
+SHA-1:d1a5672dbc454bc955e67e8998c6d6d71be62a3d<br />
+SHA-256:e9564116415901fc2553fae64e02cbb3cec13946e537cd947df88ae46690e8fc<br />
