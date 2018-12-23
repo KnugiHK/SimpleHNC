@@ -6,28 +6,23 @@ using System.IO;
 using DamienG.Security.Cryptography; //Using library from DamienGKit for calculate CRC32 value
 using System.ComponentModel;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleHNC
 {
-    public struct mainUI
-    {
-        public string filelocation;
-        public string crc32;
-        public string md5;
-        public string sha1;
-        public string sha256;
-    };
-
     public partial class SimpleHNC : Form //public partial class SimpleHNC : Form
     {
 
         //Create "Batch" in the beginning
 
-        private BackgroundWorker bw;
-        public string md5value;
+        //private BackgroundWorker bw;
+        private List<string> fullPath;
+        //TODO: Calculate at background
+        /*public string md5value;
         public string sha1value;
         public string sha256value;
-        public string crc32value;
+        public string crc32value;*/
 
         public SimpleHNC()
         {
@@ -42,7 +37,7 @@ namespace SimpleHNC
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_check_Click(object sender, EventArgs e)
         {
             //Check if the textbox is empty
             if(!String.IsNullOrEmpty(filelocation.Text) && !String.IsNullOrEmpty(targethash.Text))
@@ -165,11 +160,13 @@ It is match with CRC32 value of Source file.", "Matched");
 
         private void btn_open_Click(object sender, EventArgs e)
         {
-            OpenFileDialog OFD = new OpenFileDialog();
-            OFD.Title = "Select File";
-            OFD.Filter = "All Type (*.*)|*.*";
-            OFD.InitialDirectory = ".\\";
-            if(OFD.ShowDialog() == DialogResult.OK)
+            OpenFileDialog fileBrowser = new OpenFileDialog();
+            fileBrowser.Title = "Select File";
+            fileBrowser.Filter = "All Type (*.*)|*.*";
+            fileBrowser.InitialDirectory = ".\\";
+            fileBrowser.CheckFileExists = true;
+            fileBrowser.CheckPathExists = true;
+            if (fileBrowser.ShowDialog() == DialogResult.OK)
             {
                 btn_open.Enabled = false;
                 md5hash.Text = "";
@@ -177,7 +174,7 @@ It is match with CRC32 value of Source file.", "Matched");
                 sha256hash.Text = "";
                 crc32hash.Text = "";
                 SimpleHNC BatchForm = new SimpleHNC();
-                filelocation.Text = OFD.FileName;
+                filelocation.Text = fileBrowser.FileName;
                 if (File.Exists(filelocation.Text))
                 {
                     if (md5check.Checked)
@@ -226,11 +223,11 @@ It is match with CRC32 value of Source file.", "Matched");
 
         private void btn_Batch_Click(object sender, EventArgs e)
         {
-
-            this.Hide();
+            tabControl1.SelectTab(1);
+            /**this.Hide();
             Batch BatchForm = new Batch();
             BatchForm.Closed += (s, args) => this.Close();
-            BatchForm.Show();
+            BatchForm.Show();**/
         }
 
         private void label7_Click(object sender, EventArgs e)
@@ -282,7 +279,106 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 Clipboard.SetText(sha256hash.Text);
             }
         }
-        
+
+        private void btn_back_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectTab(0);
+        }
+
+        private void SelectFolder_Click(object sender, EventArgs e)
+        {
+            if (BatchHash.Rows[0].Cells[0].Value != null)
+            {
+                DialogResult result = MessageBox.Show("Do you want to keep current data?","Warning",MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.No)
+                {
+                    BatchHash.Rows.Clear();
+                }
+                else if(result == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+            OpenFileDialog folderBrowser = new OpenFileDialog();
+            folderBrowser.ValidateNames = false;
+            folderBrowser.CheckFileExists = false;
+            folderBrowser.CheckPathExists = true;
+            folderBrowser.Title = "Select Folder";
+            folderBrowser.Filter = "All Type (*.*)|*.*";
+            folderBrowser.InitialDirectory = ".\\";
+            folderBrowser.FileName = "Default File Name DO NOT CHANGE";
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                folderPath.Text = Path.GetDirectoryName(folderBrowser.FileName);
+            }
+            if (String.IsNullOrEmpty(folderPath.Text))
+            {
+                return;
+            }
+
+            FileInfo[] files = null;
+            DirectoryInfo folder = new DirectoryInfo(folderPath.Text);
+
+            if (!check_subfolders.Checked)
+            {
+               files = folder.GetFiles("*.*", SearchOption.TopDirectoryOnly);
+            }
+            else
+            {
+                files = folder.GetFiles("*.*", SearchOption.AllDirectories);
+            }
+            //String from FileInfo to denote full path
+            IEnumerable<string> fullNames = files.Select(file => file.FullName);
+            fullPath = fullNames.ToList();
+            for (int i = 0; i < fullPath.Count; i++)
+            {
+                string filename = fullPath[i].Substring(fullPath[i].LastIndexOf("\\") + 1);
+                this.BatchHash.Rows.Add(filename, SimpleHNC.CalCRC32(fullPath[i]),
+                                                         SimpleHNC.CalMD5(fullPath[i]),
+                                                         SimpleHNC.CalSHA1(fullPath[i]),
+                                                         SimpleHNC.CalSHA256(fullPath[i]));
+                this.BatchHash.Rows[i].HeaderCell.Value = (i + 1).ToString();
+            }
+        }
+
+        private void BatchHash_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (BatchHash.CurrentCell.Value != null)
+            {
+                Clipboard.SetDataObject(BatchHash.CurrentCell.Value.ToString(), false);
+            }
+        }
+
+        private void BatchHash_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            int IndexOfRow = BatchHash.CurrentCell.RowIndex;
+            if (BatchHash.Rows[IndexOfRow].Cells[0].Value != null)
+            {
+                filelocation.Text = fullPath[IndexOfRow];
+                crc32hash.Text = BatchHash.Rows[IndexOfRow].Cells[1].Value.ToString();
+                md5hash.Text = BatchHash.Rows[IndexOfRow].Cells[2].Value.ToString();
+                sha1hash.Text = BatchHash.Rows[IndexOfRow].Cells[3].Value.ToString();
+                sha256hash.Text = BatchHash.Rows[IndexOfRow].Cells[4].Value.ToString();
+                tabControl1.SelectTab(0);
+            }
+        }
+
+        private void BatchHash_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            e.PaintCells(e.ClipBounds, DataGridViewPaintParts.All);
+            e.PaintHeader(DataGridViewPaintParts.Background
+                        | DataGridViewPaintParts.Border
+                        | DataGridViewPaintParts.Focus
+                        | DataGridViewPaintParts.SelectionBackground
+                        | DataGridViewPaintParts.ContentForeground);
+            e.Handled = true;
+        }
+        private void BatchHash_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            this.BatchHash.Rows[e.RowIndex].HeaderCell.Value = e.RowIndex.ToString();
+        }
+
+
         //TODO: Calculate at background
         /**private void initBackgroundWorker()
         {
@@ -343,7 +439,6 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             sha1hash.Text = sha1value;
             sha256hash.Text = sha256value;
         }**/
-
     }
 
 }
