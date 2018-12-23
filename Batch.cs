@@ -63,9 +63,11 @@ namespace SimpleHNC
             }
         }
 
+
         private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             SimpleHNC main = new SimpleHNC();
+
             int IndexOfRow = dataGridView1.CurrentCell.RowIndex;
             if (dataGridView1.Rows[IndexOfRow].Cells[0].Value != null)
             {
@@ -74,6 +76,8 @@ namespace SimpleHNC
                 main.md5hash.Text = dataGridView1.Rows[IndexOfRow].Cells[2].Value.ToString();
                 main.sha1hash.Text = dataGridView1.Rows[IndexOfRow].Cells[3].Value.ToString();
                 main.sha256hash.Text = dataGridView1.Rows[IndexOfRow].Cells[4].Value.ToString();
+                this.Hide();
+                main.Closed += (s, args) => this.Close();
                 main.Show();
             }
         }
@@ -81,19 +85,9 @@ namespace SimpleHNC
         private void btn_back_Click(object sender, EventArgs e)
         {
             this.Hide();
-            SimpleHNC f2 = (SimpleHNC)this.Owner;
-            f2.Show();
-        }
-
-        private const int CP_NOCLOSE_BUTTON = 0x200;
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams myCp = base.CreateParams;
-                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
-                return myCp;
-            }
+            SimpleHNC MainForm = new SimpleHNC();
+            MainForm.Closed += (s, args) => this.Close();
+            MainForm.Show();
         }
     }
 }

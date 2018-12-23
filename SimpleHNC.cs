@@ -3,43 +3,72 @@ using System;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
-using DamienG.Security.Cryptography;
+using DamienG.Security.Cryptography; //Using library from DamienGKit for calculate CRC32 value
+using System.ComponentModel;
 using System.Threading;
 
 namespace SimpleHNC
 {
-    public partial class SimpleHNC : Form
+    public struct mainUI
     {
-        Batch BatchForm = new Batch();
-        
+        public string filelocation;
+        public string crc32;
+        public string md5;
+        public string sha1;
+        public string sha256;
+    };
+
+    public partial class SimpleHNC : Form //public partial class SimpleHNC : Form
+    {
+
+        //Create "Batch" in the beginning
+
+        private BackgroundWorker bw;
+        public string md5value;
+        public string sha1value;
+        public string sha256value;
+        public string crc32value;
+
         public SimpleHNC()
         {
             InitializeComponent();
+            //Specifing this the the owner of "Batch"
 
-            BatchForm.Owner = this;
-            BatchForm.Hide();
+            //initBackgroundWorker();
+            if (null == System.Windows.Application.Current)
+            {
+                new System.Windows.Application();
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //Check if the textbox is empty
             if(!String.IsNullOrEmpty(filelocation.Text) && !String.IsNullOrEmpty(targethash.Text))
             {
-                if(!String.IsNullOrEmpty(md5hash.Text) && !String.IsNullOrEmpty(sha1hash.Text) && !String.IsNullOrEmpty(sha256hash.Text))
-                {
-                    if(targethash.Text == md5hash.Text)
+                if(!String.IsNullOrEmpty(md5hash.Text) || 
+                   !String.IsNullOrEmpty(sha1hash.Text) || 
+                   !String.IsNullOrEmpty(sha256hash.Text) || 
+                   !String.IsNullOrEmpty(crc32hash.Text))
+                    {
+                    //if target hash value match md5's
+                    if (targethash.Text == md5hash.Text)
                     {
                         MessageBox.Show(@"Your target value is a MD5 value.
 It is match with MD5 value of Source file.", "Matched");
                     }
                     else
                     {
-                        if(targethash.Text == sha1hash.Text)
+                        //if target hash value match sha1's
+                        if (targethash.Text == sha1hash.Text)
                         {
                             MessageBox.Show(@"Your target value is a SHA-1 value. 
 It is match with SHA-1 value of Source file.", "Matched");
                         }
                         else
                         {
+                            //if target hash value match sha256's
                             if (targethash.Text == sha256hash.Text)
                             {
                                 MessageBox.Show(@"Your target value is a SHA-256 value.
@@ -47,6 +76,7 @@ It is match with SHA-256 value of Source file.", "Matched");
                             }
                             else
                             {
+                                //if target hash value match crc32's
                                 if (targethash.Text == crc32hash.Text)
                                 {
                                     MessageBox.Show(@"Your target value is a CRC32 value.
@@ -71,52 +101,67 @@ It is match with CRC32 value of Source file.", "Matched");
             }
         }
 
+        //Calculating MD5 hash value
         public static string CalMD5(string filename)
         {
             using (var md5 = MD5.Create())
             {
                 using (var stream = File.OpenRead(filename))
                 {
-                    var hash = md5.ComputeHash(stream);
+                    //Calculate hash value using methon in MD5 with the file chosen in File.OpenRead()
+                    var hash = md5.ComputeHash(stream); 
+                    //Convert hash from BIN to HEX and replace "-" to "" and change every letter to lower case
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }
         }
 
+        //Calculating SHA1 hash value
         public static string CalSHA1(string filename)
         {
             using (var sha1 = SHA1.Create())
             {
                 using (var stream = File.OpenRead(filename))
                 {
+                    //Calculate hash value using methon in SHA-1 with the file chosen in File.OpenRead()
                     var hash = sha1.ComputeHash(stream);
+                    //Convert hash from BIN to HEX and replace "-" to "" and change every letter to lower case
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }
         }
 
+        //Calculating SHA256 hash value
         public static string CalSHA256(string filename)
         {
             using (var sha256 = SHA256.Create())
             {
                 using (var stream = File.OpenRead(filename))
                 {
+                    //Calculate hash value using methon in SHA-256 with the file chosen in File.OpenRead()
                     var hash = sha256.ComputeHash(stream);
+                    //Convert hash from BIN to HEX and replace "-" to "" and change every letter to lower case
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }
         }
+
+        //Calculating CRC32 hash value
         public static string CalCRC32(string filename)
         {
             var crc32 = new Crc32();
             var hash = String.Empty;
 
             using (var fs = File.Open(filename, FileMode.Open))
-                foreach (byte b in crc32.ComputeHash(fs)) hash += b.ToString("x2").ToLower();
-
+                foreach (byte b in crc32.ComputeHash(fs)) //Calculate every byte of the file by using ComputeHash()
+                {
+                    hash += b.ToString("x2").ToLower();
+                }
             return hash;
 
         }
+
+        
 
         private void btn_open_Click(object sender, EventArgs e)
         {
@@ -126,6 +171,7 @@ It is match with CRC32 value of Source file.", "Matched");
             OFD.InitialDirectory = ".\\";
             if(OFD.ShowDialog() == DialogResult.OK)
             {
+                btn_open.Enabled = false;
                 md5hash.Text = "";
                 sha1hash.Text = "";
                 sha256hash.Text = "";
@@ -150,6 +196,13 @@ It is match with CRC32 value of Source file.", "Matched");
                     {
                         crc32hash.Text = CalCRC32(filelocation.Text);
                     }
+                    btn_open.Enabled = true;
+
+                    //Calculate at another thread
+                    /**Invoke(new Action(() =>
+                    {
+                        bw.RunWorkerAsync();
+                    }));**/
                 }
                 else
                 {
@@ -173,7 +226,11 @@ It is match with CRC32 value of Source file.", "Matched");
 
         private void btn_Batch_Click(object sender, EventArgs e)
         {
-                BatchForm.Show();
+
+            this.Hide();
+            Batch BatchForm = new Batch();
+            BatchForm.Closed += (s, args) => this.Close();
+            BatchForm.Show();
         }
 
         private void label7_Click(object sender, EventArgs e)
@@ -190,5 +247,103 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         }
 
+        private void crc32hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(crc32hash.Text))
+            {
+                crc32hash.SelectAll();
+                Clipboard.SetText(crc32hash.Text);
+            }
+        }
+
+        private void md5hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(md5hash.Text))
+            {
+                md5hash.SelectAll();
+                Clipboard.SetText(md5hash.Text);
+            }
+        }
+
+        private void sha1hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(sha1hash.Text))
+            {
+                sha1hash.SelectAll();
+                Clipboard.SetText(sha1hash.Text);
+            }
+        }
+
+        private void sha256hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(sha256hash.Text))
+            {
+                sha256hash.SelectAll();
+                Clipboard.SetText(sha256hash.Text);
+            }
+        }
+        
+        //TODO: Calculate at background
+        /**private void initBackgroundWorker()
+        {
+            bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_WorkerCompleted);
+        }
+
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            MethodInvoker mi = new MethodInvoker(UpdateUI);
+            BeginInvoke(mi, null);
+            if (md5check.Checked)
+            {
+                md5value = CalMD5(filelocation.Text);
+            }
+            if (sha1check.Checked)
+            {
+                sha1value = CalSHA1(filelocation.Text);
+            }
+            if (sha256check.Checked)
+            {
+                sha256value = CalSHA256(filelocation.Text);
+            }
+            if (crc32check.Checked)
+            {
+                crc32value = CalCRC32(filelocation.Text);
+            }
+
+            //System.Windows.Application.Current.Dispatcher.BeginInvoke(a);
+
+        }
+
+        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = e.ProgressPercentage;
+            string x = e.ProgressPercentage.ToString();
+        }
+
+        private void bw_WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                btn_open.Enabled = true;
+            }));
+
+        }
+
+        private void UpdateUI()
+        {
+            MessageBox.Show("Completed");
+            crc32hash.Text = crc32value;
+            md5hash.Text = md5value;
+            sha1hash.Text = sha1value;
+            sha256hash.Text = sha256value;
+        }**/
+
     }
+
 }

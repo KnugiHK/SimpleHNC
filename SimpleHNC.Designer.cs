@@ -29,6 +29,7 @@ namespace SimpleHNC
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimpleHNC));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,12 +52,15 @@ namespace SimpleHNC
             this.sha256check = new System.Windows.Forms.CheckBox();
             this.btn_Batch = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 82);
+            this.label1.Location = new System.Drawing.Point(36, 102);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 0;
@@ -65,7 +69,7 @@ namespace SimpleHNC
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 178);
+            this.label2.Location = new System.Drawing.Point(16, 198);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 1;
@@ -73,22 +77,23 @@ namespace SimpleHNC
             // 
             // targethash
             // 
-            this.targethash.Location = new System.Drawing.Point(88, 175);
+            this.targethash.Location = new System.Drawing.Point(88, 195);
             this.targethash.Name = "targethash";
             this.targethash.Size = new System.Drawing.Size(373, 22);
             this.targethash.TabIndex = 2;
             // 
             // md5hash
             // 
-            this.md5hash.Location = new System.Drawing.Point(88, 79);
+            this.md5hash.Location = new System.Drawing.Point(88, 99);
             this.md5hash.Name = "md5hash";
             this.md5hash.ReadOnly = true;
             this.md5hash.Size = new System.Drawing.Size(373, 22);
             this.md5hash.TabIndex = 3;
+            this.md5hash.Click += new System.EventHandler(this.md5hash_Click);
             // 
             // btn_check
             // 
-            this.btn_check.Location = new System.Drawing.Point(232, 203);
+            this.btn_check.Location = new System.Drawing.Point(232, 223);
             this.btn_check.Name = "btn_check";
             this.btn_check.Size = new System.Drawing.Size(75, 23);
             this.btn_check.TabIndex = 4;
@@ -117,24 +122,26 @@ namespace SimpleHNC
             // 
             // sha256hash
             // 
-            this.sha256hash.Location = new System.Drawing.Point(88, 135);
+            this.sha256hash.Location = new System.Drawing.Point(88, 155);
             this.sha256hash.Name = "sha256hash";
             this.sha256hash.ReadOnly = true;
             this.sha256hash.Size = new System.Drawing.Size(373, 22);
             this.sha256hash.TabIndex = 7;
+            this.sha256hash.Click += new System.EventHandler(this.sha256hash_Click);
             // 
             // sha1hash
             // 
-            this.sha1hash.Location = new System.Drawing.Point(88, 107);
+            this.sha1hash.Location = new System.Drawing.Point(88, 127);
             this.sha1hash.Name = "sha1hash";
             this.sha1hash.ReadOnly = true;
             this.sha1hash.Size = new System.Drawing.Size(373, 22);
             this.sha1hash.TabIndex = 8;
+            this.sha1hash.Click += new System.EventHandler(this.sha1hash_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 138);
+            this.label4.Location = new System.Drawing.Point(16, 158);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 12);
             this.label4.TabIndex = 9;
@@ -143,7 +150,7 @@ namespace SimpleHNC
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(28, 110);
+            this.label5.Location = new System.Drawing.Point(28, 130);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 12);
             this.label5.TabIndex = 10;
@@ -155,7 +162,7 @@ namespace SimpleHNC
             // 
             // btn_open
             // 
-            this.btn_open.Location = new System.Drawing.Point(151, 203);
+            this.btn_open.Location = new System.Drawing.Point(151, 223);
             this.btn_open.Name = "btn_open";
             this.btn_open.Size = new System.Drawing.Size(75, 23);
             this.btn_open.TabIndex = 11;
@@ -166,7 +173,7 @@ namespace SimpleHNC
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 54);
+            this.label6.Location = new System.Drawing.Point(24, 74);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(41, 12);
             this.label6.TabIndex = 12;
@@ -174,18 +181,19 @@ namespace SimpleHNC
             // 
             // crc32hash
             // 
-            this.crc32hash.Location = new System.Drawing.Point(88, 51);
+            this.crc32hash.Location = new System.Drawing.Point(88, 71);
             this.crc32hash.Name = "crc32hash";
             this.crc32hash.ReadOnly = true;
             this.crc32hash.Size = new System.Drawing.Size(373, 22);
             this.crc32hash.TabIndex = 13;
+            this.crc32hash.Click += new System.EventHandler(this.crc32hash_Click);
             // 
             // crc32check
             // 
             this.crc32check.AutoSize = true;
             this.crc32check.Checked = true;
             this.crc32check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.crc32check.Location = new System.Drawing.Point(67, 54);
+            this.crc32check.Location = new System.Drawing.Point(67, 74);
             this.crc32check.Name = "crc32check";
             this.crc32check.Size = new System.Drawing.Size(15, 14);
             this.crc32check.TabIndex = 14;
@@ -196,7 +204,7 @@ namespace SimpleHNC
             this.md5check.AutoSize = true;
             this.md5check.Checked = true;
             this.md5check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.md5check.Location = new System.Drawing.Point(67, 82);
+            this.md5check.Location = new System.Drawing.Point(67, 102);
             this.md5check.Name = "md5check";
             this.md5check.Size = new System.Drawing.Size(15, 14);
             this.md5check.TabIndex = 15;
@@ -207,7 +215,7 @@ namespace SimpleHNC
             this.sha1check.AutoSize = true;
             this.sha1check.Checked = true;
             this.sha1check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sha1check.Location = new System.Drawing.Point(67, 110);
+            this.sha1check.Location = new System.Drawing.Point(67, 130);
             this.sha1check.Name = "sha1check";
             this.sha1check.Size = new System.Drawing.Size(15, 14);
             this.sha1check.TabIndex = 16;
@@ -218,7 +226,7 @@ namespace SimpleHNC
             this.sha256check.AutoSize = true;
             this.sha256check.Checked = true;
             this.sha256check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sha256check.Location = new System.Drawing.Point(67, 138);
+            this.sha256check.Location = new System.Drawing.Point(67, 158);
             this.sha256check.Name = "sha256check";
             this.sha256check.Size = new System.Drawing.Size(15, 14);
             this.sha256check.TabIndex = 17;
@@ -226,7 +234,7 @@ namespace SimpleHNC
             // 
             // btn_Batch
             // 
-            this.btn_Batch.Location = new System.Drawing.Point(386, 203);
+            this.btn_Batch.Location = new System.Drawing.Point(386, 223);
             this.btn_Batch.Name = "btn_Batch";
             this.btn_Batch.Size = new System.Drawing.Size(75, 23);
             this.btn_Batch.TabIndex = 18;
@@ -237,12 +245,23 @@ namespace SimpleHNC
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(1, 214);
+            this.label7.Location = new System.Drawing.Point(1, 234);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(100, 12);
             this.label7.TabIndex = 19;
             this.label7.Text = "© 2018 SimpleHNC";
             this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(88, 42);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(373, 23);
+            this.progressBar1.TabIndex = 20;
             // 
             // SimpleHNC
             // 
@@ -250,7 +269,8 @@ namespace SimpleHNC
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 231);
+            this.ClientSize = new System.Drawing.Size(482, 256);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btn_Batch);
             this.Controls.Add(this.sha256check);
@@ -277,6 +297,7 @@ namespace SimpleHNC
             this.Name = "SimpleHNC";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SimpleHNC - Beta";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,12 +320,14 @@ namespace SimpleHNC
         private System.Windows.Forms.CheckBox sha1check;
         private System.Windows.Forms.CheckBox sha256check;
         private System.Windows.Forms.Button btn_Batch;
-        public System.Windows.Forms.TextBox md5hash;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ProgressBar progressBar1;
         public System.Windows.Forms.TextBox filelocation;
+        public System.Windows.Forms.TextBox md5hash;
         public System.Windows.Forms.TextBox sha256hash;
         public System.Windows.Forms.TextBox sha1hash;
         public System.Windows.Forms.TextBox crc32hash;
-        private System.Windows.Forms.Label label7;
     }
 }
 
