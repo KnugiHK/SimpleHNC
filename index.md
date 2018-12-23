@@ -18,7 +18,7 @@ For binary file please select download mirror below.
 In addition don't forget to verify the checksum after downloading binary file!
    
 ## Mirror
-* [MPFS Archive](https://archive.mpfstudio.site/binary/SimpleHNC.exe)
+* [MPFS Archive](https://mpfstudio.cf/binary/SimpleHNC.exe)
 * [GitHub](https://github.com/knugi0123/SimpleHNC/releases/download/Beta_2/SimpleHNC.exe)
 
   
