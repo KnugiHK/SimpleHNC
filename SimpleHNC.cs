@@ -27,8 +27,6 @@ namespace SimpleHNC
         public SimpleHNC()
         {
             InitializeComponent();
-            //Specifing this the the owner of "Batch"
-
             //initBackgroundWorker();
             if (null == System.Windows.Application.Current)
             {
@@ -96,8 +94,43 @@ It is match with CRC32 value of Source file.", "Matched");
             }
         }
 
-        //Calculating MD5 hash value
-        public static string CalMD5(string filename)
+        private void Calculate()
+        {
+            btn_open.Enabled = false;
+            md5hash.Text = "";
+            sha1hash.Text = "";
+            sha256hash.Text = "";
+            crc32hash.Text = "";
+            if (File.Exists(filelocation.Text))
+            {
+                if (md5check.Checked)
+                {
+                    md5hash.Text = CalMD5(filelocation.Text);
+                }
+                if (sha1check.Checked)
+                {
+                    sha1hash.Text = CalSHA1(filelocation.Text);
+                }
+                if (sha256check.Checked)
+                {
+                    sha256hash.Text = CalSHA256(filelocation.Text);
+                }
+                if (crc32check.Checked)
+                {
+                    crc32hash.Text = CalCRC32(filelocation.Text);
+                }
+                btn_open.Enabled = true;
+                btn_check.Enabled = true;
+                //Calculate at another thread
+                /**Invoke(new Action(() =>
+                {
+                    bw.RunWorkerAsync();
+                }));**/
+            }
+        }
+
+            //Calculating MD5 hash value
+            public static string CalMD5(string filename)
         {
             using (var md5 = MD5.Create())
             {
@@ -156,7 +189,7 @@ It is match with CRC32 value of Source file.", "Matched");
 
         }
 
-        
+
 
         private void btn_open_Click(object sender, EventArgs e)
         {
@@ -168,43 +201,12 @@ It is match with CRC32 value of Source file.", "Matched");
             fileBrowser.CheckPathExists = true;
             if (fileBrowser.ShowDialog() == DialogResult.OK)
             {
-                btn_open.Enabled = false;
-                md5hash.Text = "";
-                sha1hash.Text = "";
-                sha256hash.Text = "";
-                crc32hash.Text = "";
-                SimpleHNC BatchForm = new SimpleHNC();
                 filelocation.Text = fileBrowser.FileName;
-                if (File.Exists(filelocation.Text))
-                {
-                    if (md5check.Checked)
-                    {
-                        md5hash.Text = CalMD5(filelocation.Text);
-                    }
-                    if (sha1check.Checked)
-                    {
-                        sha1hash.Text = CalSHA1(filelocation.Text);
-                    }
-                    if (sha256check.Checked)
-                    {
-                        sha256hash.Text = CalSHA256(filelocation.Text);
-                    }
-                    if (crc32check.Checked)
-                    {
-                        crc32hash.Text = CalCRC32(filelocation.Text);
-                    }
-                    btn_open.Enabled = true;
-
-                    //Calculate at another thread
-                    /**Invoke(new Action(() =>
-                    {
-                        bw.RunWorkerAsync();
-                    }));**/
-                }
-                else
-                {
-                    MessageBox.Show("Source File cannot found", "Error");
-                }
+                Calculate();
+            }
+            else
+            {
+                MessageBox.Show("Source File cannot found", "Error");
             }
         }
 
@@ -376,6 +378,35 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         private void BatchHash_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             this.BatchHash.Rows[e.RowIndex].HeaderCell.Value = e.RowIndex.ToString();
+        }
+
+        private string location;
+        private void tab_Normal_DragDrop(object sender, DragEventArgs e)
+        {
+            ;
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                location = file;
+            }
+            FileAttributes attr = File.GetAttributes(location);
+            if (attr.HasFlag(FileAttributes.Directory))
+            {
+                MessageBox.Show("It must be a file not a directory.");
+            }
+            else
+            {
+                filelocation.Text = location;
+                Calculate();
+            }
+        }
+
+        private void tab_Normal_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
         }
 
 

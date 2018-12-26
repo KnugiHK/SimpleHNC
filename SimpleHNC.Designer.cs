@@ -55,8 +55,8 @@ namespace SimpleHNC
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tab_Normal = new System.Windows.Forms.TabPage();
+            this.tab_Batch = new System.Windows.Forms.TabPage();
             this.check_subfolders = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -71,8 +71,8 @@ namespace SimpleHNC
             this.Display_SHA256 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tab_Normal.SuspendLayout();
+            this.tab_Batch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,6 +112,7 @@ namespace SimpleHNC
             // 
             // btn_check
             // 
+            this.btn_check.Enabled = false;
             this.btn_check.Location = new System.Drawing.Point(547, 242);
             this.btn_check.Name = "btn_check";
             this.btn_check.Size = new System.Drawing.Size(75, 23);
@@ -284,60 +285,63 @@ namespace SimpleHNC
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tab_Normal);
+            this.tabControl1.Controls.Add(this.tab_Batch);
             this.tabControl1.Location = new System.Drawing.Point(-1, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1189, 574);
             this.tabControl1.TabIndex = 21;
             // 
-            // tabPage1
+            // tab_Normal
             // 
-            this.tabPage1.Controls.Add(this.targethash);
-            this.tabPage1.Controls.Add(this.progressBar1);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.btn_Batch);
-            this.tabPage1.Controls.Add(this.md5hash);
-            this.tabPage1.Controls.Add(this.sha256check);
-            this.tabPage1.Controls.Add(this.btn_check);
-            this.tabPage1.Controls.Add(this.sha1check);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.md5check);
-            this.tabPage1.Controls.Add(this.filelocation);
-            this.tabPage1.Controls.Add(this.crc32check);
-            this.tabPage1.Controls.Add(this.sha256hash);
-            this.tabPage1.Controls.Add(this.crc32hash);
-            this.tabPage1.Controls.Add(this.sha1hash);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.btn_open);
-            this.tabPage1.Controls.Add(this.label5);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1181, 548);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Normal";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tab_Normal.AllowDrop = true;
+            this.tab_Normal.Controls.Add(this.targethash);
+            this.tab_Normal.Controls.Add(this.progressBar1);
+            this.tab_Normal.Controls.Add(this.label1);
+            this.tab_Normal.Controls.Add(this.label2);
+            this.tab_Normal.Controls.Add(this.btn_Batch);
+            this.tab_Normal.Controls.Add(this.md5hash);
+            this.tab_Normal.Controls.Add(this.sha256check);
+            this.tab_Normal.Controls.Add(this.btn_check);
+            this.tab_Normal.Controls.Add(this.sha1check);
+            this.tab_Normal.Controls.Add(this.label3);
+            this.tab_Normal.Controls.Add(this.md5check);
+            this.tab_Normal.Controls.Add(this.filelocation);
+            this.tab_Normal.Controls.Add(this.crc32check);
+            this.tab_Normal.Controls.Add(this.sha256hash);
+            this.tab_Normal.Controls.Add(this.crc32hash);
+            this.tab_Normal.Controls.Add(this.sha1hash);
+            this.tab_Normal.Controls.Add(this.label6);
+            this.tab_Normal.Controls.Add(this.label4);
+            this.tab_Normal.Controls.Add(this.btn_open);
+            this.tab_Normal.Controls.Add(this.label5);
+            this.tab_Normal.Location = new System.Drawing.Point(4, 22);
+            this.tab_Normal.Name = "tab_Normal";
+            this.tab_Normal.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_Normal.Size = new System.Drawing.Size(1181, 548);
+            this.tab_Normal.TabIndex = 0;
+            this.tab_Normal.Text = "Normal";
+            this.tab_Normal.UseVisualStyleBackColor = true;
+            this.tab_Normal.DragDrop += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragDrop);
+            this.tab_Normal.DragEnter += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragEnter);
             // 
-            // tabPage2
+            // tab_Batch
             // 
-            this.tabPage2.Controls.Add(this.check_subfolders);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.btn_back);
-            this.tabPage2.Controls.Add(this.SelectFolder);
-            this.tabPage2.Controls.Add(this.folderPath);
-            this.tabPage2.Controls.Add(this.BatchHash);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1181, 548);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Batch";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tab_Batch.Controls.Add(this.check_subfolders);
+            this.tab_Batch.Controls.Add(this.label9);
+            this.tab_Batch.Controls.Add(this.label8);
+            this.tab_Batch.Controls.Add(this.btn_back);
+            this.tab_Batch.Controls.Add(this.SelectFolder);
+            this.tab_Batch.Controls.Add(this.folderPath);
+            this.tab_Batch.Controls.Add(this.BatchHash);
+            this.tab_Batch.Location = new System.Drawing.Point(4, 22);
+            this.tab_Batch.Name = "tab_Batch";
+            this.tab_Batch.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_Batch.Size = new System.Drawing.Size(1181, 548);
+            this.tab_Batch.TabIndex = 1;
+            this.tab_Batch.Text = "Batch";
+            this.tab_Batch.UseVisualStyleBackColor = true;
             // 
             // check_subfolders
             // 
@@ -473,10 +477,10 @@ namespace SimpleHNC
             this.Text = "SimpleHNC - Beta";
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tab_Normal.ResumeLayout(false);
+            this.tab_Normal.PerformLayout();
+            this.tab_Batch.ResumeLayout(false);
+            this.tab_Batch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -509,8 +513,8 @@ namespace SimpleHNC
         public System.Windows.Forms.TextBox sha1hash;
         public System.Windows.Forms.TextBox crc32hash;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tab_Normal;
+        private System.Windows.Forms.TabPage tab_Batch;
         private System.Windows.Forms.Button btn_back;
         private System.Windows.Forms.Button SelectFolder;
         private System.Windows.Forms.TextBox folderPath;
