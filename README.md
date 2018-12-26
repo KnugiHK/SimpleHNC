@@ -7,6 +7,10 @@ Simple Hash value calculater and Checksum Tool
 3. SHA-1
 4. SHA-256
 
+# To-Do
+1. Add SHA-384 support
+2. Feature: report of Batch
+
 # Checksum
 CRC32:9681ef6e<br />
 MD5:b6e55e041a9294ca603b3d2b57ffa854<br />
