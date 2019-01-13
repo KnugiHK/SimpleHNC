@@ -436,7 +436,7 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     {
                         cols.Add(BatchHash.Rows[i].Cells[j].Value.ToString());
                     }
-                    builder.AppendLine(string.Join("\t", cols.ToArray()));
+                    builder.AppendLine(string.Join("\t", cols.ToArray()) + "\n");
                 }
                 System.IO.File.WriteAllText(dialog.FileName, builder.ToString());
                 MessageBox.Show(@"Report was created.");
