@@ -100,7 +100,7 @@ namespace SimpleHNC
             // 
             this.targethash.Location = new System.Drawing.Point(403, 214);
             this.targethash.Name = "targethash";
-            this.targethash.Size = new System.Drawing.Size(373, 22);
+            this.targethash.Size = new System.Drawing.Size(375, 22);
             this.targethash.TabIndex = 2;
             // 
             // md5hash
@@ -108,7 +108,7 @@ namespace SimpleHNC
             this.md5hash.Location = new System.Drawing.Point(403, 118);
             this.md5hash.Name = "md5hash";
             this.md5hash.ReadOnly = true;
-            this.md5hash.Size = new System.Drawing.Size(373, 22);
+            this.md5hash.Size = new System.Drawing.Size(375, 22);
             this.md5hash.TabIndex = 3;
             this.md5hash.Click += new System.EventHandler(this.md5hash_Click);
             // 
@@ -138,7 +138,7 @@ namespace SimpleHNC
             this.filelocation.Location = new System.Drawing.Point(403, 31);
             this.filelocation.Name = "filelocation";
             this.filelocation.ReadOnly = true;
-            this.filelocation.Size = new System.Drawing.Size(373, 22);
+            this.filelocation.Size = new System.Drawing.Size(375, 22);
             this.filelocation.TabIndex = 6;
             this.filelocation.DragDrop += new System.Windows.Forms.DragEventHandler(this.filelocation_DragDrop);
             // 
@@ -147,7 +147,7 @@ namespace SimpleHNC
             this.sha256hash.Location = new System.Drawing.Point(403, 174);
             this.sha256hash.Name = "sha256hash";
             this.sha256hash.ReadOnly = true;
-            this.sha256hash.Size = new System.Drawing.Size(373, 22);
+            this.sha256hash.Size = new System.Drawing.Size(375, 22);
             this.sha256hash.TabIndex = 7;
             this.sha256hash.Click += new System.EventHandler(this.sha256hash_Click);
             // 
@@ -156,7 +156,7 @@ namespace SimpleHNC
             this.sha1hash.Location = new System.Drawing.Point(403, 146);
             this.sha1hash.Name = "sha1hash";
             this.sha1hash.ReadOnly = true;
-            this.sha1hash.Size = new System.Drawing.Size(373, 22);
+            this.sha1hash.Size = new System.Drawing.Size(375, 22);
             this.sha1hash.TabIndex = 8;
             this.sha1hash.Click += new System.EventHandler(this.sha1hash_Click);
             // 
@@ -206,7 +206,7 @@ namespace SimpleHNC
             this.crc32hash.Location = new System.Drawing.Point(403, 90);
             this.crc32hash.Name = "crc32hash";
             this.crc32hash.ReadOnly = true;
-            this.crc32hash.Size = new System.Drawing.Size(373, 22);
+            this.crc32hash.Size = new System.Drawing.Size(375, 22);
             this.crc32hash.TabIndex = 13;
             this.crc32hash.Click += new System.EventHandler(this.crc32hash_Click);
             // 
@@ -272,7 +272,7 @@ namespace SimpleHNC
             // 
             this.progressBar1.Location = new System.Drawing.Point(403, 61);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(373, 23);
+            this.progressBar1.Size = new System.Drawing.Size(375, 23);
             this.progressBar1.TabIndex = 20;
             // 
             // tabControl1
@@ -467,7 +467,7 @@ namespace SimpleHNC
             // 
             // btn_export
             // 
-            this.btn_export.Location = new System.Drawing.Point(620, 242);
+            this.btn_export.Location = new System.Drawing.Point(622, 242);
             this.btn_export.Name = "btn_export";
             this.btn_export.Size = new System.Drawing.Size(75, 23);
             this.btn_export.TabIndex = 21;
@@ -477,7 +477,7 @@ namespace SimpleHNC
             // 
             // btn_import
             // 
-            this.btn_import.Location = new System.Drawing.Point(701, 242);
+            this.btn_import.Location = new System.Drawing.Point(703, 242);
             this.btn_import.Name = "btn_import";
             this.btn_import.Size = new System.Drawing.Size(75, 23);
             this.btn_import.TabIndex = 22;

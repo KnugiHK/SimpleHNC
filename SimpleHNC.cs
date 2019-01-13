@@ -7,6 +7,8 @@ using DamienG.Security.Cryptography; //Using library from DamienGKit for calcula
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace SimpleHNC
 {
@@ -102,6 +104,17 @@ It is match with CRC32 value of Source file.", "Matched");
             crc32hash.Text = "";
             if (File.Exists(filelocation.Text))
             {
+                if (crc32check.Checked)
+                {
+                    if (filelocation.Text == Process.GetCurrentProcess().MainModule.FileName)
+                    {
+                        crc32hash.Text = "Unavailable while check this program itself.";
+                    }
+                    else
+                    {
+                        crc32hash.Text = CalCRC32(filelocation.Text);
+                    }
+                }
                 if (md5check.Checked)
                 {
                     md5hash.Text = CalMD5(filelocation.Text);
@@ -113,10 +126,6 @@ It is match with CRC32 value of Source file.", "Matched");
                 if (sha256check.Checked)
                 {
                     sha256hash.Text = CalSHA256(filelocation.Text);
-                }
-                if (crc32check.Checked)
-                {
-                    crc32hash.Text = CalCRC32(filelocation.Text);
                 }
                 btn_open.Enabled = true;
                 btn_check.Enabled = true;
