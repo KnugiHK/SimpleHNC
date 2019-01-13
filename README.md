@@ -11,9 +11,8 @@ This is part of Power Tools.
 
 # To-Do
 1. Add SHA-384 support
-2. Feature: report of Batch
-3. Feature: Right click menu shortcut
-4. Calculate at background
+2. Feature: Right click menu shortcut
+3. Calculate at background
 
 # Checksum
 CRC32:9681ef6e<br />
