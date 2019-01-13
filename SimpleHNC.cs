@@ -460,8 +460,8 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 SaveFileDialog dialog = new SaveFileDialog();
                 dialog.ValidateNames = true;
                 dialog.Title = "Export to file";
-                dialog.Filter = "CRC32 File|*.crc32|MD5 File|*.md5|SHA-1 File|*.sha1|SHA-256 File|*.sha256|SHNC File|*.shnc";
-                dialog.DefaultExt = "sha1";
+                dialog.Filter = "SimpleHNC File|*.shnc|CRC32 File|*.crc32|MD5 File|*.md5|SHA-1 File|*.sha1|SHA-256 File|*.sha256";
+                dialog.DefaultExt = ".shnc";
                 dialog.InitialDirectory = filelocation.Text.Substring(0, filelocation.Text.LastIndexOf("\\"));
                 dialog.FileName = filename;
                 dialog.AddExtension = true;
@@ -546,7 +546,7 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 crc32hash.Text = fileContent[1];
                 md5hash.Text = fileContent[2];
                 sha1hash.Text = fileContent[3];
-                sha256hash.Text = fileContent[3];
+                sha256hash.Text = fileContent[4];
             }
         }
 
