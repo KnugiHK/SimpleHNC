@@ -4,10 +4,9 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
 using DamienG.Security.Cryptography; //Using library from DamienGKit for calculate CRC32 value
-using System.ComponentModel;
-using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SimpleHNC
 {
@@ -199,10 +198,15 @@ It is match with CRC32 value of Source file.", "Matched");
             fileBrowser.InitialDirectory = ".\\";
             fileBrowser.CheckFileExists = true;
             fileBrowser.CheckPathExists = true;
-            if (fileBrowser.ShowDialog() == DialogResult.OK)
+            var result = fileBrowser.ShowDialog();
+            if (result == DialogResult.OK)
             {
                 filelocation.Text = fileBrowser.FileName;
                 Calculate();
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                return;
             }
             else
             {
@@ -221,15 +225,6 @@ It is match with CRC32 value of Source file.", "Matched");
 
         private void ShowWaitingMsg()
         {
-        }
-
-        private void btn_Batch_Click(object sender, EventArgs e)
-        {
-            tabControl1.SelectTab(1);
-            /**this.Hide();
-            Batch BatchForm = new Batch();
-            BatchForm.Closed += (s, args) => this.Close();
-            BatchForm.Show();**/
         }
 
         private void label7_Click(object sender, EventArgs e)
@@ -295,6 +290,7 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 if (result == DialogResult.No)
                 {
                     BatchHash.Rows.Clear();
+                    btn_report.Enabled = false;
                 }
                 else if(result == DialogResult.Cancel)
                 {
@@ -312,6 +308,10 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
                 folderPath.Text = Path.GetDirectoryName(folderBrowser.FileName);
+            }
+            else
+            {
+                return;
             }
             if (String.IsNullOrEmpty(folderPath.Text))
             {
@@ -341,6 +341,10 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                                          SimpleHNC.CalSHA256(fullPath[i]));
                 this.BatchHash.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
+            if (BatchHash.Rows[0].Cells[0].Value != null) {
+                btn_report.Enabled = true;
+            }
+            
         }
 
         private void BatchHash_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -353,14 +357,13 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         private void BatchHash_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            int IndexOfRow = BatchHash.CurrentCell.RowIndex;
-            if (BatchHash.Rows[IndexOfRow].Cells[0].Value != null)
+            if (BatchHash.Rows[e.RowIndex].Cells[0].Value != null)
             {
-                filelocation.Text = fullPath[IndexOfRow];
-                crc32hash.Text = BatchHash.Rows[IndexOfRow].Cells[1].Value.ToString();
-                md5hash.Text = BatchHash.Rows[IndexOfRow].Cells[2].Value.ToString();
-                sha1hash.Text = BatchHash.Rows[IndexOfRow].Cells[3].Value.ToString();
-                sha256hash.Text = BatchHash.Rows[IndexOfRow].Cells[4].Value.ToString();
+                filelocation.Text = fullPath[e.RowIndex];
+                crc32hash.Text = BatchHash.Rows[e.RowIndex].Cells[1].Value.ToString();
+                md5hash.Text = BatchHash.Rows[e.RowIndex].Cells[2].Value.ToString();
+                sha1hash.Text = BatchHash.Rows[e.RowIndex].Cells[3].Value.ToString();
+                sha256hash.Text = BatchHash.Rows[e.RowIndex].Cells[4].Value.ToString();
                 tabControl1.SelectTab(0);
             }
         }
@@ -409,6 +412,143 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             }
         }
 
+        private void btn_report_Click(object sender, EventArgs e)
+        {
+            if (BatchHash.Rows[0].Cells[0].Value != null)
+            {
+                //Hooman@Stack Overflow & S.Akbari@Stack Overflow
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Filter = "Text File|*.txt";
+                var result = dialog.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }         
+                StringBuilder builder = new StringBuilder();
+                int rowcount = BatchHash.Rows.Count;
+                int columncount = BatchHash.Columns.Count;
+                List<string> headerCols = new List<string>();
+                builder.AppendLine("File Name \t CRC32 \t MD5 \t SHA-1 \t SHA-256");
+                for (int i = 0; i < rowcount - 1; i++)
+                {
+                    List<string> cols = new List<string>();
+                    for (int j = 0; j < columncount - 1; j++)
+                    {
+                        cols.Add(BatchHash.Rows[i].Cells[j].Value.ToString());
+                    }
+                    builder.AppendLine(string.Join("\t", cols.ToArray()));
+                }
+                System.IO.File.WriteAllText(dialog.FileName, builder.ToString());
+                MessageBox.Show(@"Report was created.");
+            }
+        }
+
+        private void btn_export_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(filelocation.Text) &&
+                (!String.IsNullOrEmpty(crc32hash.Text) ||
+                !String.IsNullOrEmpty(md5hash.Text) ||
+                !String.IsNullOrEmpty(sha1hash.Text) ||
+                !String.IsNullOrEmpty(sha256hash.Text)))
+            {
+                string filename = filelocation.Text.Substring(filelocation.Text.LastIndexOf("\\") + 1);
+                int originalFilenamePos = filename.IndexOf(".shnc (");
+                if (originalFilenamePos != -1)
+                {
+                    filename = filename.Substring(originalFilenamePos + 7, filename.Length - 1 - (originalFilenamePos + 7));
+                }
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.ValidateNames = true;
+                dialog.Title = "Export to file";
+                dialog.Filter = "CRC32 File|*.crc32|MD5 File|*.md5|SHA-1 File|*.sha1|SHA-256 File|*.sha256|SHNC File|*.shnc";
+                dialog.DefaultExt = "sha1";
+                dialog.InitialDirectory = filelocation.Text.Substring(0, filelocation.Text.LastIndexOf("\\"));
+                dialog.FileName = filename;
+                dialog.AddExtension = true;
+                var result = dialog.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+                var extension = Path.GetExtension(dialog.FileName);
+                StringBuilder builder = new StringBuilder();
+                switch (extension.ToLower())
+                {
+                    case ".crc32":
+                        {
+                            builder.AppendLine(crc32hash.Text + " *" + filename);
+                            break;
+                        }
+                    case ".md5":
+                        {
+                            builder.AppendLine(md5hash.Text + " *" + filename);
+                            break;
+                        }
+                    case ".sha1":
+                        {
+                            builder.AppendLine(sha1hash.Text + " *" + filename);
+                            break;
+                        }
+                    case ".sha256":
+                        {
+                            builder.AppendLine(sha256hash.Text + " *" + filename);
+                            break;
+                        }
+                    default:
+                        {
+                            builder.AppendLine(filename);
+                            builder.AppendLine("CRC32: " + crc32hash.Text + " *" + filename);
+                            builder.AppendLine("MD5: " + md5hash.Text + " *" + filename);
+                            builder.AppendLine("SHA-1: " + sha1hash.Text + " *" + filename);
+                            builder.AppendLine("SHA-256: " + sha256hash.Text + " *" + filename);
+                            break;
+                        }
+                }
+                System.IO.File.WriteAllText(dialog.FileName, builder.ToString());
+                MessageBox.Show(@"Report was created.","Success");
+            }
+            else
+            {
+                MessageBox.Show(@"You must hash something first.","Error");
+            }
+        }
+
+        private void btn_import_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog importFile = new OpenFileDialog();
+            importFile.CheckFileExists = true;
+            importFile.CheckPathExists = true;
+            importFile.Filter = "SHNC File|*.shnc";
+            var result = importFile.ShowDialog();
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+            var fileStream = new FileStream(importFile.FileName, FileMode.Open, FileAccess.Read);
+            List<string> fileContent = new List<string>();
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                string line;
+                int i = 0;
+                while ((line = streamReader.ReadLine()) != null)
+                {    
+                    if (i == 0)
+                    {
+                        fileContent.Add(line);
+                    }
+                    else
+                    {
+                        fileContent.Add(line.Substring(line.IndexOf(" ") + 1, line.LastIndexOf(" ") - line.IndexOf(" ") - 1));
+                    }
+                    i += 1;
+                }
+                filelocation.Text = importFile.FileName + " (" + fileContent[0] + ")";
+                crc32hash.Text = fileContent[1];
+                md5hash.Text = fileContent[2];
+                sha1hash.Text = fileContent[3];
+                sha256hash.Text = fileContent[3];
+            }
+        }
 
         //TODO: Calculate at background
         /**private void initBackgroundWorker()

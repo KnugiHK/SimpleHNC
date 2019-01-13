@@ -50,13 +50,13 @@ namespace SimpleHNC
             this.md5check = new System.Windows.Forms.CheckBox();
             this.sha1check = new System.Windows.Forms.CheckBox();
             this.sha256check = new System.Windows.Forms.CheckBox();
-            this.btn_Batch = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_Normal = new System.Windows.Forms.TabPage();
             this.tab_Batch = new System.Windows.Forms.TabPage();
+            this.btn_report = new System.Windows.Forms.Button();
             this.check_subfolders = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -69,6 +69,8 @@ namespace SimpleHNC
             this.Display_MD5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Display_SHA1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Display_SHA256 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_export = new System.Windows.Forms.Button();
+            this.btn_import = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tab_Normal.SuspendLayout();
@@ -113,7 +115,7 @@ namespace SimpleHNC
             // btn_check
             // 
             this.btn_check.Enabled = false;
-            this.btn_check.Location = new System.Drawing.Point(547, 242);
+            this.btn_check.Location = new System.Drawing.Point(484, 242);
             this.btn_check.Name = "btn_check";
             this.btn_check.Size = new System.Drawing.Size(75, 23);
             this.btn_check.TabIndex = 4;
@@ -182,7 +184,7 @@ namespace SimpleHNC
             // 
             // btn_open
             // 
-            this.btn_open.Location = new System.Drawing.Point(466, 242);
+            this.btn_open.Location = new System.Drawing.Point(403, 242);
             this.btn_open.Name = "btn_open";
             this.btn_open.Size = new System.Drawing.Size(75, 23);
             this.btn_open.TabIndex = 11;
@@ -252,16 +254,6 @@ namespace SimpleHNC
             this.sha256check.TabIndex = 17;
             this.sha256check.UseVisualStyleBackColor = true;
             // 
-            // btn_Batch
-            // 
-            this.btn_Batch.Location = new System.Drawing.Point(701, 242);
-            this.btn_Batch.Name = "btn_Batch";
-            this.btn_Batch.Size = new System.Drawing.Size(75, 23);
-            this.btn_Batch.TabIndex = 18;
-            this.btn_Batch.Text = "Batch";
-            this.btn_Batch.UseVisualStyleBackColor = true;
-            this.btn_Batch.Click += new System.EventHandler(this.btn_Batch_Click);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -296,11 +288,12 @@ namespace SimpleHNC
             // tab_Normal
             // 
             this.tab_Normal.AllowDrop = true;
+            this.tab_Normal.Controls.Add(this.btn_import);
+            this.tab_Normal.Controls.Add(this.btn_export);
             this.tab_Normal.Controls.Add(this.targethash);
             this.tab_Normal.Controls.Add(this.progressBar1);
             this.tab_Normal.Controls.Add(this.label1);
             this.tab_Normal.Controls.Add(this.label2);
-            this.tab_Normal.Controls.Add(this.btn_Batch);
             this.tab_Normal.Controls.Add(this.md5hash);
             this.tab_Normal.Controls.Add(this.sha256check);
             this.tab_Normal.Controls.Add(this.btn_check);
@@ -328,6 +321,7 @@ namespace SimpleHNC
             // 
             // tab_Batch
             // 
+            this.tab_Batch.Controls.Add(this.btn_report);
             this.tab_Batch.Controls.Add(this.check_subfolders);
             this.tab_Batch.Controls.Add(this.label9);
             this.tab_Batch.Controls.Add(this.label8);
@@ -342,6 +336,17 @@ namespace SimpleHNC
             this.tab_Batch.TabIndex = 1;
             this.tab_Batch.Text = "Batch";
             this.tab_Batch.UseVisualStyleBackColor = true;
+            // 
+            // btn_report
+            // 
+            this.btn_report.Enabled = false;
+            this.btn_report.Location = new System.Drawing.Point(11, 52);
+            this.btn_report.Name = "btn_report";
+            this.btn_report.Size = new System.Drawing.Size(98, 23);
+            this.btn_report.TabIndex = 12;
+            this.btn_report.Text = "Export Report";
+            this.btn_report.UseVisualStyleBackColor = true;
+            this.btn_report.Click += new System.EventHandler(this.btn_report_Click);
             // 
             // check_subfolders
             // 
@@ -460,6 +465,26 @@ namespace SimpleHNC
             this.Display_SHA256.ReadOnly = true;
             this.Display_SHA256.Width = 380;
             // 
+            // btn_export
+            // 
+            this.btn_export.Location = new System.Drawing.Point(620, 242);
+            this.btn_export.Name = "btn_export";
+            this.btn_export.Size = new System.Drawing.Size(75, 23);
+            this.btn_export.TabIndex = 21;
+            this.btn_export.Text = "Export";
+            this.btn_export.UseVisualStyleBackColor = true;
+            this.btn_export.Click += new System.EventHandler(this.btn_export_Click);
+            // 
+            // btn_import
+            // 
+            this.btn_import.Location = new System.Drawing.Point(701, 242);
+            this.btn_import.Name = "btn_import";
+            this.btn_import.Size = new System.Drawing.Size(75, 23);
+            this.btn_import.TabIndex = 22;
+            this.btn_import.Text = "Import";
+            this.btn_import.UseVisualStyleBackColor = true;
+            this.btn_import.Click += new System.EventHandler(this.btn_import_Click);
+            // 
             // SimpleHNC
             // 
             this.AcceptButton = this.btn_check;
@@ -503,7 +528,6 @@ namespace SimpleHNC
         private System.Windows.Forms.CheckBox md5check;
         private System.Windows.Forms.CheckBox sha1check;
         private System.Windows.Forms.CheckBox sha256check;
-        private System.Windows.Forms.Button btn_Batch;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ProgressBar progressBar1;
@@ -527,6 +551,9 @@ namespace SimpleHNC
         private System.Windows.Forms.DataGridViewTextBoxColumn Display_MD5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Display_SHA1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Display_SHA256;
+        private System.Windows.Forms.Button btn_report;
+        private System.Windows.Forms.Button btn_export;
+        private System.Windows.Forms.Button btn_import;
     }
 }
 
