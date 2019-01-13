@@ -16,7 +16,11 @@ This program is part of Power Tools.
 
 # Checksum
 SimpleHNC.exe (Beta 3)
+
 CRC32: b4a40dee
+
 MD5: a587261ef8d4977b8885168e2c8decdc
+
 SHA-1: a3cca5006b5c900e6835321c2aa905dcb456d1d1
+
 SHA-256: 6c0320a28400018f980b1bb62c34df53e711f6e315563eb9db7861d458c946af
