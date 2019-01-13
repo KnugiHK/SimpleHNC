@@ -1,7 +1,7 @@
 # SimpleHNC
 Simple Hash value calculater and Checksum Tool
 
-This is part of Power Tools.
+This program is part of Power Tools.
 
 # Supported Algorithm
 1. CRC32
