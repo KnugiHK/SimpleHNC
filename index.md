@@ -21,7 +21,7 @@ In addition don't forget to verify the checksum after downloading binary file!
    
 ## Mirror
 * [GitHub](https://github.com/knugi0123/SimpleHNC/releases/download/Beta_3/SimpleHNC.exe)
-* [Github(Checksum)](https://github.com/knugi0123/SimpleHNC/releases/download/Beta_3/SimpleHNC.exe.shnc)
+* [Github (Checksum)](https://github.com/knugi0123/SimpleHNC/releases/download/Beta_3/SimpleHNC.exe.shnc)
 * [MPFS Archive](https://mpfstudio.cf/binary/SimpleHNC.exe) *Not Yet Update*
 
   
