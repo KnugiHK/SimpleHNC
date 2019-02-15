@@ -7,12 +7,15 @@ using DamienG.Security.Cryptography; //Using library from DamienGKit for calcula
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reflection;
 using System.Diagnostics;
+using Microsoft;
+using System.Security.Principal;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace SimpleHNC
 {
-    public partial class SimpleHNC : Form //public partial class SimpleHNC : Form
+    public partial class SimpleHNC : Form
     {
 
         //Create "Batch" in the beginning
@@ -25,13 +28,18 @@ namespace SimpleHNC
         public string sha256value;
         public string crc32value;*/
 
-        public SimpleHNC()
+        public SimpleHNC(string args)
         {
             InitializeComponent();
             //initBackgroundWorker();
             if (null == System.Windows.Application.Current)
             {
                 new System.Windows.Application();
+            }
+            if (!String.IsNullOrEmpty(args))
+            {
+                filelocation.Text = args;
+                Calculate();
             }
 
         }
@@ -138,7 +146,7 @@ It is match with CRC32 value of Source file.", "Matched");
         }
 
             //Calculating MD5 hash value
-            public static string CalMD5(string filename)
+        public static string CalMD5(string filename)
         {
             using (var md5 = MD5.Create())
             {
@@ -212,6 +220,7 @@ It is match with CRC32 value of Source file.", "Matched");
             {
                 filelocation.Text = fileBrowser.FileName;
                 Calculate();
+                targethash.Text = Clipboard.GetText();
             }
             else if (result == DialogResult.Cancel)
             {
@@ -238,7 +247,7 @@ It is match with CRC32 value of Source file.", "Matched");
 
         private void label7_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Thanks for hash function icon by dDara from the Noun Project" + "\n\n" + @"Copyright 2018 MultiPlay Fun Studio
+            MessageBox.Show("Thanks for hash function icon by dDara from the Noun Project" + "\n\n" + @"Copyright 2018-2019 MultiPlay Fun Studio
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -246,7 +255,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
 
-        "SimpleHNC Beta 2 Credit");
+        "SimpleHNC Beta 3 Credit");
 
         }
 
@@ -373,6 +382,11 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 md5hash.Text = BatchHash.Rows[e.RowIndex].Cells[2].Value.ToString();
                 sha1hash.Text = BatchHash.Rows[e.RowIndex].Cells[3].Value.ToString();
                 sha256hash.Text = BatchHash.Rows[e.RowIndex].Cells[4].Value.ToString();
+                btn_check.Enabled = true;
+                if (check_ClipboardValue.Checked)
+                {
+                    targethash.Text = Clipboard.GetText();
+                }
                 tabControl1.SelectTab(0);
             }
         }
@@ -558,6 +572,81 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 sha256hash.Text = fileContent[4];
             }
         }
+
+        private bool checkPrivilege()
+        {
+            WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            bool hasAdministrativeRight = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+            if (!hasAdministrativeRight)
+            {
+                // relaunch the application with admin rights
+                string fileName = Assembly.GetExecutingAssembly().Location;
+                ProcessStartInfo processInfo = new ProcessStartInfo();
+                processInfo.Verb = "runas";
+                processInfo.FileName = fileName;
+                try
+                {
+                    Process.Start(processInfo);
+                    Application.Exit();
+                }
+                catch (Win32Exception)
+                {
+                    MessageBox.Show("You must run this program as an administrator.", "Error");
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void btn_RightClickMenu_Click(object sender, EventArgs e)
+        {
+            if (checkPrivilege() == false)
+            {
+                // Defining the path for later on.
+                const string CR = "HKEY_CLASSES_ROOT";
+
+                const string rootOfMenu = CR + "\\*\\shell\\SimpleHNC";
+                Microsoft.Win32.Registry.SetValue(rootOfMenu, "Subcommands", "");
+                const string containerOfMenu = CR + "\\*\\shell\\SimpleHNC\\shell";
+                Microsoft.Win32.Registry.SetValue(containerOfMenu, "Installed", "Yes");
+                const string Hash = CR + "\\*\\shell\\SimpleHNC\\shell\\Hash";
+                Microsoft.Win32.Registry.SetValue(Hash, "", "");
+                const string HashCommand = CR + "\\*\\shell\\SimpleHNC\\shell\\Hash\\command";
+                Microsoft.Win32.Registry.SetValue(HashCommand, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                const string CRC32 = CR + "\\*\\shell\\SimpleHNC\\shell\\CRC32";
+                Microsoft.Win32.Registry.SetValue(CRC32, "", "");
+                const string CRC32Command = CR + "\\*\\shell\\SimpleHNC\\shell\\CRC32\\command";
+                Microsoft.Win32.Registry.SetValue(CRC32Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                const string MD5 = CR + "\\*\\shell\\SimpleHNC\\shell\\MD5";
+                Microsoft.Win32.Registry.SetValue(MD5, "", "");
+                const string MD5Command = CR + "\\*\\shell\\SimpleHNC\\shell\\MD5\\command";
+                Microsoft.Win32.Registry.SetValue(MD5Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                const string SHA1 = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-1";
+                Microsoft.Win32.Registry.SetValue(SHA1, "", "");
+                const string SHA1Command = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-1\\command";
+                Microsoft.Win32.Registry.SetValue(SHA1Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                const string SHA256 = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-256";
+                Microsoft.Win32.Registry.SetValue(SHA256, "", "");
+                const string SHA256Command = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-256\\command";
+                Microsoft.Win32.Registry.SetValue(SHA256Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+
+                MessageBox.Show("Menu added." + "\n" + "Remember to remove the menu before you delete/move this program", "Done");
+            }          
+        }
+
+        private void btn_RemoveRightClickMenu_Click(object sender, EventArgs e)
+        {
+            if (checkPrivilege() == false)
+            {
+                Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree("*\\shell\\SimpleHNC");
+                MessageBox.Show("Menu removed.", "Done");
+            }             
+        }
+
+
 
         //TODO: Calculate at background
         /**private void initBackgroundWorker()

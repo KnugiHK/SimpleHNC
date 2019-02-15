@@ -55,6 +55,8 @@ namespace SimpleHNC
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_Normal = new System.Windows.Forms.TabPage();
+            this.btn_import = new System.Windows.Forms.Button();
+            this.btn_export = new System.Windows.Forms.Button();
             this.tab_Batch = new System.Windows.Forms.TabPage();
             this.btn_report = new System.Windows.Forms.Button();
             this.check_subfolders = new System.Windows.Forms.CheckBox();
@@ -69,13 +71,22 @@ namespace SimpleHNC
             this.Display_MD5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Display_SHA1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Display_SHA256 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btn_export = new System.Windows.Forms.Button();
-            this.btn_import = new System.Windows.Forms.Button();
+            this.btn_ = new System.Windows.Forms.TabPage();
+            this.panel_ContextMenu = new System.Windows.Forms.Panel();
+            this.btn_RightClickMenu = new System.Windows.Forms.Button();
+            this.btn_RemoveRightClickMenu = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.check_ClipboardValue = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tab_Normal.SuspendLayout();
             this.tab_Batch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).BeginInit();
+            this.btn_.SuspendLayout();
+            this.panel_ContextMenu.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -259,9 +270,9 @@ namespace SimpleHNC
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(12, 577);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(100, 12);
+            this.label7.Size = new System.Drawing.Size(128, 12);
             this.label7.TabIndex = 19;
-            this.label7.Text = "© 2018 SimpleHNC";
+            this.label7.Text = "© 2018-2019 SimpleHNC";
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // errorProvider1
@@ -279,6 +290,7 @@ namespace SimpleHNC
             // 
             this.tabControl1.Controls.Add(this.tab_Normal);
             this.tabControl1.Controls.Add(this.tab_Batch);
+            this.tabControl1.Controls.Add(this.btn_);
             this.tabControl1.Location = new System.Drawing.Point(-1, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -318,6 +330,26 @@ namespace SimpleHNC
             this.tab_Normal.UseVisualStyleBackColor = true;
             this.tab_Normal.DragDrop += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragDrop);
             this.tab_Normal.DragEnter += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragEnter);
+            // 
+            // btn_import
+            // 
+            this.btn_import.Location = new System.Drawing.Point(703, 242);
+            this.btn_import.Name = "btn_import";
+            this.btn_import.Size = new System.Drawing.Size(75, 23);
+            this.btn_import.TabIndex = 22;
+            this.btn_import.Text = "Import";
+            this.btn_import.UseVisualStyleBackColor = true;
+            this.btn_import.Click += new System.EventHandler(this.btn_import_Click);
+            // 
+            // btn_export
+            // 
+            this.btn_export.Location = new System.Drawing.Point(622, 242);
+            this.btn_export.Name = "btn_export";
+            this.btn_export.Size = new System.Drawing.Size(75, 23);
+            this.btn_export.TabIndex = 21;
+            this.btn_export.Text = "Export";
+            this.btn_export.UseVisualStyleBackColor = true;
+            this.btn_export.Click += new System.EventHandler(this.btn_export_Click);
             // 
             // tab_Batch
             // 
@@ -361,7 +393,7 @@ namespace SimpleHNC
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("新細明體", 18F);
+            this.label9.Font = new System.Drawing.Font("PMingLiU", 18F);
             this.label9.Location = new System.Drawing.Point(550, 48);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(365, 24);
@@ -371,16 +403,16 @@ namespace SimpleHNC
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("新細明體", 18F);
+            this.label8.Font = new System.Drawing.Font("PMingLiU", 18F);
             this.label8.Location = new System.Drawing.Point(568, 19);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(328, 24);
+            this.label8.Size = new System.Drawing.Size(293, 24);
             this.label8.TabIndex = 9;
-            this.label8.Text = "Click any column to copy the value";
+            this.label8.Text = "Click any cell to copy the value";
             // 
             // btn_back
             // 
-            this.btn_back.Font = new System.Drawing.Font("新細明體", 18F);
+            this.btn_back.Font = new System.Drawing.Font("PMingLiU", 18F);
             this.btn_back.Location = new System.Drawing.Point(946, 26);
             this.btn_back.Name = "btn_back";
             this.btn_back.Size = new System.Drawing.Size(191, 46);
@@ -465,25 +497,92 @@ namespace SimpleHNC
             this.Display_SHA256.ReadOnly = true;
             this.Display_SHA256.Width = 380;
             // 
-            // btn_export
+            // btn_
             // 
-            this.btn_export.Location = new System.Drawing.Point(622, 242);
-            this.btn_export.Name = "btn_export";
-            this.btn_export.Size = new System.Drawing.Size(75, 23);
-            this.btn_export.TabIndex = 21;
-            this.btn_export.Text = "Export";
-            this.btn_export.UseVisualStyleBackColor = true;
-            this.btn_export.Click += new System.EventHandler(this.btn_export_Click);
+            this.btn_.Controls.Add(this.panel1);
+            this.btn_.Controls.Add(this.panel_ContextMenu);
+            this.btn_.Location = new System.Drawing.Point(4, 22);
+            this.btn_.Name = "btn_";
+            this.btn_.Padding = new System.Windows.Forms.Padding(3);
+            this.btn_.Size = new System.Drawing.Size(1181, 548);
+            this.btn_.TabIndex = 2;
+            this.btn_.Text = "Setting";
+            this.btn_.UseVisualStyleBackColor = true;
             // 
-            // btn_import
+            // panel_ContextMenu
             // 
-            this.btn_import.Location = new System.Drawing.Point(703, 242);
-            this.btn_import.Name = "btn_import";
-            this.btn_import.Size = new System.Drawing.Size(75, 23);
-            this.btn_import.TabIndex = 22;
-            this.btn_import.Text = "Import";
-            this.btn_import.UseVisualStyleBackColor = true;
-            this.btn_import.Click += new System.EventHandler(this.btn_import_Click);
+            this.panel_ContextMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_ContextMenu.Controls.Add(this.btn_RightClickMenu);
+            this.panel_ContextMenu.Controls.Add(this.btn_RemoveRightClickMenu);
+            this.panel_ContextMenu.Controls.Add(this.label10);
+            this.panel_ContextMenu.Location = new System.Drawing.Point(6, 6);
+            this.panel_ContextMenu.Name = "panel_ContextMenu";
+            this.panel_ContextMenu.Size = new System.Drawing.Size(1169, 264);
+            this.panel_ContextMenu.TabIndex = 3;
+            // 
+            // btn_RightClickMenu
+            // 
+            this.btn_RightClickMenu.Font = new System.Drawing.Font("PMingLiU", 20F);
+            this.btn_RightClickMenu.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_RightClickMenu.Location = new System.Drawing.Point(202, 130);
+            this.btn_RightClickMenu.Name = "btn_RightClickMenu";
+            this.btn_RightClickMenu.Size = new System.Drawing.Size(284, 112);
+            this.btn_RightClickMenu.TabIndex = 0;
+            this.btn_RightClickMenu.Text = "Add Hash calculation to \r\ncontext menu\r\n";
+            this.btn_RightClickMenu.UseVisualStyleBackColor = true;
+            this.btn_RightClickMenu.Click += new System.EventHandler(this.btn_RightClickMenu_Click);
+            // 
+            // btn_RemoveRightClickMenu
+            // 
+            this.btn_RemoveRightClickMenu.Font = new System.Drawing.Font("PMingLiU", 20F);
+            this.btn_RemoveRightClickMenu.Location = new System.Drawing.Point(704, 130);
+            this.btn_RemoveRightClickMenu.Name = "btn_RemoveRightClickMenu";
+            this.btn_RemoveRightClickMenu.Size = new System.Drawing.Size(284, 112);
+            this.btn_RemoveRightClickMenu.TabIndex = 1;
+            this.btn_RemoveRightClickMenu.Text = "Remove Hash calculation\r\nfrom context menu ";
+            this.btn_RemoveRightClickMenu.UseVisualStyleBackColor = true;
+            this.btn_RemoveRightClickMenu.Click += new System.EventHandler(this.btn_RemoveRightClickMenu_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("PMingLiU", 20F);
+            this.label10.Location = new System.Drawing.Point(334, 60);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(538, 27);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "These two button REQUIRE ADMIN PRIVILEGE";
+            // 
+            // check_ClipboardValue
+            // 
+            this.check_ClipboardValue.AutoSize = true;
+            this.check_ClipboardValue.Location = new System.Drawing.Point(450, 91);
+            this.check_ClipboardValue.Name = "check_ClipboardValue";
+            this.check_ClipboardValue.Size = new System.Drawing.Size(252, 16);
+            this.check_ClipboardValue.TabIndex = 4;
+            this.check_ClipboardValue.Text = "Always paste content on clipboard to target value";
+            this.check_ClipboardValue.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.check_ClipboardValue);
+            this.panel1.Location = new System.Drawing.Point(6, 276);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1166, 266);
+            this.panel1.TabIndex = 4;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("PMingLiU", 16F);
+            this.label11.Location = new System.Drawing.Point(446, 12);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(280, 44);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "Beta Feature\r\nYou Must Enable It Every Time";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // SimpleHNC
             // 
@@ -507,6 +606,11 @@ namespace SimpleHNC
             this.tab_Batch.ResumeLayout(false);
             this.tab_Batch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).EndInit();
+            this.btn_.ResumeLayout(false);
+            this.panel_ContextMenu.ResumeLayout(false);
+            this.panel_ContextMenu.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -554,6 +658,14 @@ namespace SimpleHNC
         private System.Windows.Forms.Button btn_report;
         private System.Windows.Forms.Button btn_export;
         private System.Windows.Forms.Button btn_import;
+        private System.Windows.Forms.TabPage btn_;
+        private System.Windows.Forms.Button btn_RightClickMenu;
+        private System.Windows.Forms.Button btn_RemoveRightClickMenu;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Panel panel_ContextMenu;
+        private System.Windows.Forms.CheckBox check_ClipboardValue;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label11;
     }
 }
 
