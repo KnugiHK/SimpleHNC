@@ -1,4 +1,4 @@
-﻿// Last modify:1545310805
+﻿// Last modify:1550578075
 using System;
 using System.Windows.Forms;
 using System.Security.Cryptography;
@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using Microsoft;
 using System.Security.Principal;
 using System.Reflection;
 using System.ComponentModel;
@@ -28,7 +27,7 @@ namespace SimpleHNC
         public string sha256value;
         public string crc32value;*/
 
-        public SimpleHNC(string args)
+        public SimpleHNC(string arg, string arg2)
         {
             InitializeComponent();
             //initBackgroundWorker();
@@ -36,12 +35,79 @@ namespace SimpleHNC
             {
                 new System.Windows.Application();
             }
-            if (!String.IsNullOrEmpty(args))
+            /*if (!String.IsNullOrEmpty(args))
             {
                 filelocation.Text = args;
                 Calculate();
+            }*/
+            if (!String.IsNullOrEmpty(arg))
+            {
+                if (String.IsNullOrEmpty(arg2))
+                {
+                    filelocation.Text = arg;
+                    Calculate();
+                }
+                else
+                {
+                    if (arg2 == "MD5")
+                    {
+                        RightClickCalculation(arg, "MD5");
+                    }
+                    else if (arg2 == "CRC32")
+                    {
+                        RightClickCalculation(arg, "CRC32");
+                    }
+                    else if (arg2 == "SHA-1")
+                    {
+                        RightClickCalculation(arg, "SHA-1");
+                    }
+                    else if (arg2 == "SHA-256")
+                    {
+                        RightClickCalculation(arg, "SHA-256");
+                    }
+                }
             }
 
+        }
+        private void RightClickCalculation(string location, string type)
+        {
+            string hashValue = String.Empty;
+            if (type == "MD5")
+            {
+                hashValue = CalMD5(location);
+                md5hash.Text = hashValue;
+            }
+            else if (type == "CRC32")
+            {
+                hashValue = CalCRC32(location);
+                crc32hash.Text = hashValue;
+            }
+            else if (type == "SHA-1")
+            {
+                hashValue = CalSHA1(location);
+                sha1hash.Text = hashValue;
+            }
+            else if (type == "SHA-256")
+            {
+                hashValue = CalSHA256(location);
+                sha256hash.Text = hashValue;
+            }
+
+            DialogResult response = MessageBox.Show(type + " value of this file is " + hashValue + "\n" + "Click \"Yes\" to copy the hash value." + "\n" + "Click \"No\" to exit." + "\n" + "Click \"Cancel\" to open SimpleHNC.", "SimpleHNC - Quick mode", MessageBoxButtons.YesNoCancel);
+            if (response == DialogResult.Yes)
+            {
+                Clipboard.SetData(DataFormats.Text, (Object)hashValue);
+                Environment.Exit(0);
+            }
+            else if (response == DialogResult.No)
+            {
+                Environment.Exit(0);
+            }
+            else if (response == DialogResult.Cancel)
+            {
+                filelocation.Text = location;
+                btn_check.Enabled = true;
+            }
         }
 
         private void btn_check_Click(object sender, EventArgs e)
@@ -135,6 +201,14 @@ It is match with CRC32 value of Source file.", "Matched");
                 {
                     sha256hash.Text = CalSHA256(filelocation.Text);
                 }
+                if (sha384check.Checked)
+                {
+                    sha384hash.Text = CalSHA384(filelocation.Text);
+                }
+                if (sha512check.Checked)
+                {
+                    sha512hash.Text = CalSHA512(filelocation.Text);
+                }
                 btn_open.Enabled = true;
                 btn_check.Enabled = true;
                 //Calculate at another thread
@@ -145,7 +219,22 @@ It is match with CRC32 value of Source file.", "Matched");
             }
         }
 
-            //Calculating MD5 hash value
+        //Calculating CRC32 hash value
+        public static string CalCRC32(string filename)
+        {
+            var crc32 = new Crc32();
+            var hash = String.Empty;
+
+            using (var fs = File.Open(filename, FileMode.Open))
+                foreach (byte b in crc32.ComputeHash(fs)) //Calculate every byte of the file by using ComputeHash()
+                {
+                    hash += b.ToString("x2").ToLower();
+                }
+            return hash;
+
+        }
+
+        //Calculating MD5 hash value
         public static string CalMD5(string filename)
         {
             using (var md5 = MD5.Create())
@@ -190,21 +279,35 @@ It is match with CRC32 value of Source file.", "Matched");
             }
         }
 
-        //Calculating CRC32 hash value
-        public static string CalCRC32(string filename)
+        //Calculating SHA384 hash value
+        public static string CalSHA384(string filename)
         {
-            var crc32 = new Crc32();
-            var hash = String.Empty;
-
-            using (var fs = File.Open(filename, FileMode.Open))
-                foreach (byte b in crc32.ComputeHash(fs)) //Calculate every byte of the file by using ComputeHash()
+            using (var sha384 = SHA384.Create())
+            {
+                using (var stream = File.OpenRead(filename))
                 {
-                    hash += b.ToString("x2").ToLower();
+                    //Calculate hash value using methon in SHA-256 with the file chosen in File.OpenRead()
+                    var hash = sha384.ComputeHash(stream);
+                    //Convert hash from BIN to HEX and replace "-" to "" and change every letter to lower case
+                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
-            return hash;
-
+            }
         }
 
+        //Calculating SHA384 hash value
+        public static string CalSHA512(string filename)
+        {
+            using (var sha512 = SHA512.Create())
+            {
+                using (var stream = File.OpenRead(filename))
+                {
+                    //Calculate hash value using methon in SHA-256 with the file chosen in File.OpenRead()
+                    var hash = sha512.ComputeHash(stream);
+                    //Convert hash from BIN to HEX and replace "-" to "" and change every letter to lower case
+                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
 
 
         private void btn_open_Click(object sender, EventArgs e)
@@ -220,7 +323,10 @@ It is match with CRC32 value of Source file.", "Matched");
             {
                 filelocation.Text = fileBrowser.FileName;
                 Calculate();
-                targethash.Text = Clipboard.GetText();
+                if (check_ClipboardValue.Checked)
+                {
+                    targethash.Text = Clipboard.GetText();
+                }
             }
             else if (result == DialogResult.Cancel)
             {
@@ -239,24 +345,6 @@ It is match with CRC32 value of Source file.", "Matched");
             {
                 filelocation.Text = files[0];
             }
-        }
-
-        private void ShowWaitingMsg()
-        {
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Thanks for hash function icon by dDara from the Noun Project" + "\n\n" + @"Copyright 2018-2019 MultiPlay Fun Studio
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-
-        "SimpleHNC Beta 3 Credit");
-
         }
 
         private void crc32hash_Click(object sender, EventArgs e)
@@ -292,6 +380,24 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             {
                 sha256hash.SelectAll();
                 Clipboard.SetText(sha256hash.Text);
+            }
+        }
+
+        private void sha384hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(sha384hash.Text))
+            {
+                sha384hash.SelectAll();
+                Clipboard.SetText(sha384hash.Text);
+            }
+        }
+
+        private void sha512hash_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(sha512hash.Text))
+            {
+                sha512hash.SelectAll();
+                Clipboard.SetText(sha512hash.Text);
             }
         }
 
@@ -409,7 +515,6 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         private string location;
         private void tab_Normal_DragDrop(object sender, DragEventArgs e)
         {
-            ;
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
             {
@@ -607,8 +712,23 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             {
                 // Defining the path for later on.
                 const string CR = "HKEY_CLASSES_ROOT";
-
                 const string rootOfMenu = CR + "\\*\\shell\\SimpleHNC";
+                using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("*\\shell\\SimpleHNC"))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue("Install");
+                        if (o != null)
+                        {
+                            if (o.ToString() == "Yes")
+                            {
+                                MessageBox.Show("Feature already installed.","Error");
+                                return;
+                            }
+                        }
+                    }
+                }
+             
                 Microsoft.Win32.Registry.SetValue(rootOfMenu, "Subcommands", "");
                 const string containerOfMenu = CR + "\\*\\shell\\SimpleHNC\\shell";
                 Microsoft.Win32.Registry.SetValue(containerOfMenu, "Installed", "Yes");
@@ -619,19 +739,19 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 const string CRC32 = CR + "\\*\\shell\\SimpleHNC\\shell\\CRC32";
                 Microsoft.Win32.Registry.SetValue(CRC32, "", "");
                 const string CRC32Command = CR + "\\*\\shell\\SimpleHNC\\shell\\CRC32\\command";
-                Microsoft.Win32.Registry.SetValue(CRC32Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                Microsoft.Win32.Registry.SetValue(CRC32Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\" \"CRC32\"");
                 const string MD5 = CR + "\\*\\shell\\SimpleHNC\\shell\\MD5";
                 Microsoft.Win32.Registry.SetValue(MD5, "", "");
                 const string MD5Command = CR + "\\*\\shell\\SimpleHNC\\shell\\MD5\\command";
-                Microsoft.Win32.Registry.SetValue(MD5Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                Microsoft.Win32.Registry.SetValue(MD5Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\" \"MD5\"");
                 const string SHA1 = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-1";
                 Microsoft.Win32.Registry.SetValue(SHA1, "", "");
                 const string SHA1Command = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-1\\command";
-                Microsoft.Win32.Registry.SetValue(SHA1Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                Microsoft.Win32.Registry.SetValue(SHA1Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\" \"SHA-1\"");
                 const string SHA256 = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-256";
                 Microsoft.Win32.Registry.SetValue(SHA256, "", "");
                 const string SHA256Command = CR + "\\*\\shell\\SimpleHNC\\shell\\SHA-256\\command";
-                Microsoft.Win32.Registry.SetValue(SHA256Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\"");
+                Microsoft.Win32.Registry.SetValue(SHA256Command, "", Application.StartupPath + "\\SimpleHNC.exe \"%1\" \"SHA-256\"");
 
                 MessageBox.Show("Menu added." + "\n" + "Remember to remove the menu before you delete/move this program", "Done");
             }          
@@ -643,10 +763,26 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             {
                 Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree("*\\shell\\SimpleHNC");
                 MessageBox.Show("Menu removed.", "Done");
-            }             
+            }
         }
 
+        private void copyright_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Thanks for hash function icon by dDara from the Noun Project" + "\n\n" + @"Copyright 2018-2019 MultiPlay Fun Studio (This program released in GPL-3.0)
 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+
+        "SimpleHNC Beta 3 Credit");
+
+        }
+
+        private void ShowWaitingMsg()
+        {
+        }
 
         //TODO: Calculate at background
         /**private void initBackgroundWorker()
