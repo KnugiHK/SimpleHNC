@@ -8,13 +8,14 @@ This program is part of Power Tools.
 2. MD5
 3. SHA-1
 4. SHA-256
+5. SHA-384 *Not fully support*
+6. SHA-512 *Not fully support*
 
 # To-Do
-1. Add SHA-384 support
-2. Feature: Right click menu shortcut
-3. Calculate at background
+1. Add fully support on SHA-384 and SHA-512
+2. Calculate at background
 
-# Checksum
+# Checksum (released binary only)
 SimpleHNC.exe (Beta 3)
 
 CRC32: b4a40dee<br />
