@@ -1,4 +1,4 @@
-﻿// Last modify:1528030015
+﻿// Last modify:1550578075
 namespace SimpleHNC
 {
     partial class SimpleHNC
@@ -50,11 +50,17 @@ namespace SimpleHNC
             this.md5check = new System.Windows.Forms.CheckBox();
             this.sha1check = new System.Windows.Forms.CheckBox();
             this.sha256check = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.copyright = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_Normal = new System.Windows.Forms.TabPage();
+            this.sha384hash = new System.Windows.Forms.TextBox();
+            this.sha512hash = new System.Windows.Forms.TextBox();
+            this.sha512check = new System.Windows.Forms.CheckBox();
+            this.sha384check = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.btn_import = new System.Windows.Forms.Button();
             this.btn_export = new System.Windows.Forms.Button();
             this.tab_Batch = new System.Windows.Forms.TabPage();
@@ -72,21 +78,21 @@ namespace SimpleHNC
             this.Display_SHA1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Display_SHA256 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_ = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.check_ClipboardValue = new System.Windows.Forms.CheckBox();
             this.panel_ContextMenu = new System.Windows.Forms.Panel();
             this.btn_RightClickMenu = new System.Windows.Forms.Button();
             this.btn_RemoveRightClickMenu = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
-            this.check_ClipboardValue = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tab_Normal.SuspendLayout();
             this.tab_Batch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).BeginInit();
             this.btn_.SuspendLayout();
-            this.panel_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel_ContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -101,7 +107,7 @@ namespace SimpleHNC
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(331, 217);
+            this.label2.Location = new System.Drawing.Point(331, 274);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 1;
@@ -109,7 +115,7 @@ namespace SimpleHNC
             // 
             // targethash
             // 
-            this.targethash.Location = new System.Drawing.Point(403, 214);
+            this.targethash.Location = new System.Drawing.Point(403, 271);
             this.targethash.Name = "targethash";
             this.targethash.Size = new System.Drawing.Size(375, 22);
             this.targethash.TabIndex = 2;
@@ -126,7 +132,7 @@ namespace SimpleHNC
             // btn_check
             // 
             this.btn_check.Enabled = false;
-            this.btn_check.Location = new System.Drawing.Point(484, 242);
+            this.btn_check.Location = new System.Drawing.Point(484, 299);
             this.btn_check.Name = "btn_check";
             this.btn_check.Size = new System.Drawing.Size(75, 23);
             this.btn_check.TabIndex = 4;
@@ -195,7 +201,7 @@ namespace SimpleHNC
             // 
             // btn_open
             // 
-            this.btn_open.Location = new System.Drawing.Point(403, 242);
+            this.btn_open.Location = new System.Drawing.Point(403, 299);
             this.btn_open.Name = "btn_open";
             this.btn_open.Size = new System.Drawing.Size(75, 23);
             this.btn_open.TabIndex = 11;
@@ -265,15 +271,15 @@ namespace SimpleHNC
             this.sha256check.TabIndex = 17;
             this.sha256check.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // copyright
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 577);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(128, 12);
-            this.label7.TabIndex = 19;
-            this.label7.Text = "© 2018-2019 SimpleHNC";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
+            this.copyright.AutoSize = true;
+            this.copyright.Location = new System.Drawing.Point(12, 577);
+            this.copyright.Name = "copyright";
+            this.copyright.Size = new System.Drawing.Size(128, 12);
+            this.copyright.TabIndex = 19;
+            this.copyright.Text = "© 2018-2019 SimpleHNC";
+            this.copyright.Click += new System.EventHandler(this.copyright_Click);
             // 
             // errorProvider1
             // 
@@ -300,6 +306,12 @@ namespace SimpleHNC
             // tab_Normal
             // 
             this.tab_Normal.AllowDrop = true;
+            this.tab_Normal.Controls.Add(this.sha384hash);
+            this.tab_Normal.Controls.Add(this.sha512hash);
+            this.tab_Normal.Controls.Add(this.sha512check);
+            this.tab_Normal.Controls.Add(this.sha384check);
+            this.tab_Normal.Controls.Add(this.label13);
+            this.tab_Normal.Controls.Add(this.label12);
             this.tab_Normal.Controls.Add(this.btn_import);
             this.tab_Normal.Controls.Add(this.btn_export);
             this.tab_Normal.Controls.Add(this.targethash);
@@ -331,9 +343,67 @@ namespace SimpleHNC
             this.tab_Normal.DragDrop += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragDrop);
             this.tab_Normal.DragEnter += new System.Windows.Forms.DragEventHandler(this.tab_Normal_DragEnter);
             // 
+            // sha384hash
+            // 
+            this.sha384hash.Location = new System.Drawing.Point(403, 202);
+            this.sha384hash.Name = "sha384hash";
+            this.sha384hash.ReadOnly = true;
+            this.sha384hash.Size = new System.Drawing.Size(375, 22);
+            this.sha384hash.TabIndex = 28;
+            this.sha384hash.Click += new System.EventHandler(this.sha384hash_Click);
+            // 
+            // sha512hash
+            // 
+            this.sha512hash.Location = new System.Drawing.Point(403, 230);
+            this.sha512hash.Name = "sha512hash";
+            this.sha512hash.ReadOnly = true;
+            this.sha512hash.Size = new System.Drawing.Size(375, 22);
+            this.sha512hash.TabIndex = 27;
+            this.sha512hash.Click += new System.EventHandler(this.sha512hash_Click);
+            // 
+            // sha512check
+            // 
+            this.sha512check.AutoSize = true;
+            this.sha512check.Checked = true;
+            this.sha512check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sha512check.Location = new System.Drawing.Point(382, 233);
+            this.sha512check.Name = "sha512check";
+            this.sha512check.Size = new System.Drawing.Size(15, 14);
+            this.sha512check.TabIndex = 26;
+            this.sha512check.UseVisualStyleBackColor = true;
+            // 
+            // sha384check
+            // 
+            this.sha384check.AutoSize = true;
+            this.sha384check.Checked = true;
+            this.sha384check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sha384check.Location = new System.Drawing.Point(382, 205);
+            this.sha384check.Name = "sha384check";
+            this.sha384check.Size = new System.Drawing.Size(15, 14);
+            this.sha384check.TabIndex = 25;
+            this.sha384check.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(331, 235);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(49, 12);
+            this.label13.TabIndex = 24;
+            this.label13.Text = "SHA-512";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(331, 207);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(49, 12);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "SHA-384";
+            // 
             // btn_import
             // 
-            this.btn_import.Location = new System.Drawing.Point(703, 242);
+            this.btn_import.Location = new System.Drawing.Point(703, 299);
             this.btn_import.Name = "btn_import";
             this.btn_import.Size = new System.Drawing.Size(75, 23);
             this.btn_import.TabIndex = 22;
@@ -343,7 +413,7 @@ namespace SimpleHNC
             // 
             // btn_export
             // 
-            this.btn_export.Location = new System.Drawing.Point(622, 242);
+            this.btn_export.Location = new System.Drawing.Point(622, 299);
             this.btn_export.Name = "btn_export";
             this.btn_export.Size = new System.Drawing.Size(75, 23);
             this.btn_export.TabIndex = 21;
@@ -509,6 +579,37 @@ namespace SimpleHNC
             this.btn_.Text = "Setting";
             this.btn_.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.check_ClipboardValue);
+            this.panel1.Location = new System.Drawing.Point(6, 276);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1166, 266);
+            this.panel1.TabIndex = 4;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("PMingLiU", 16F);
+            this.label11.Location = new System.Drawing.Point(446, 12);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(280, 44);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "Beta Feature\r\nYou Must Enable It Every Time";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // check_ClipboardValue
+            // 
+            this.check_ClipboardValue.AutoSize = true;
+            this.check_ClipboardValue.Location = new System.Drawing.Point(450, 91);
+            this.check_ClipboardValue.Name = "check_ClipboardValue";
+            this.check_ClipboardValue.Size = new System.Drawing.Size(252, 16);
+            this.check_ClipboardValue.TabIndex = 4;
+            this.check_ClipboardValue.Text = "Always paste content on clipboard to target value";
+            this.check_ClipboardValue.UseVisualStyleBackColor = true;
+            // 
             // panel_ContextMenu
             // 
             this.panel_ContextMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -553,37 +654,6 @@ namespace SimpleHNC
             this.label10.TabIndex = 2;
             this.label10.Text = "These two button REQUIRE ADMIN PRIVILEGE";
             // 
-            // check_ClipboardValue
-            // 
-            this.check_ClipboardValue.AutoSize = true;
-            this.check_ClipboardValue.Location = new System.Drawing.Point(450, 91);
-            this.check_ClipboardValue.Name = "check_ClipboardValue";
-            this.check_ClipboardValue.Size = new System.Drawing.Size(252, 16);
-            this.check_ClipboardValue.TabIndex = 4;
-            this.check_ClipboardValue.Text = "Always paste content on clipboard to target value";
-            this.check_ClipboardValue.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.label11);
-            this.panel1.Controls.Add(this.check_ClipboardValue);
-            this.panel1.Location = new System.Drawing.Point(6, 276);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1166, 266);
-            this.panel1.TabIndex = 4;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("PMingLiU", 16F);
-            this.label11.Location = new System.Drawing.Point(446, 12);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(280, 44);
-            this.label11.TabIndex = 5;
-            this.label11.Text = "Beta Feature\r\nYou Must Enable It Every Time";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // SimpleHNC
             // 
             this.AcceptButton = this.btn_check;
@@ -592,7 +662,7 @@ namespace SimpleHNC
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1187, 598);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.copyright);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -607,10 +677,10 @@ namespace SimpleHNC
             this.tab_Batch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BatchHash)).EndInit();
             this.btn_.ResumeLayout(false);
-            this.panel_ContextMenu.ResumeLayout(false);
-            this.panel_ContextMenu.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel_ContextMenu.ResumeLayout(false);
+            this.panel_ContextMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -632,7 +702,7 @@ namespace SimpleHNC
         private System.Windows.Forms.CheckBox md5check;
         private System.Windows.Forms.CheckBox sha1check;
         private System.Windows.Forms.CheckBox sha256check;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label copyright;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ProgressBar progressBar1;
         public System.Windows.Forms.TextBox filelocation;
@@ -666,6 +736,12 @@ namespace SimpleHNC
         private System.Windows.Forms.CheckBox check_ClipboardValue;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label11;
+        public System.Windows.Forms.TextBox sha384hash;
+        public System.Windows.Forms.TextBox sha512hash;
+        private System.Windows.Forms.CheckBox sha512check;
+        private System.Windows.Forms.CheckBox sha384check;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
     }
 }
 
